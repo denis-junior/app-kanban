@@ -16,6 +16,11 @@ export const createTask = async (task: Omit<Task, 'id'>): Promise<Task> => {
 };
 
 export const updateTask = async (id: string, updates: TaskUpdate): Promise<Task> => {
+  const { data } = await httpService.put<Task>(`/tasks/${id}`, updates);
+  return data;
+};
+
+export const updateTaskStatus = async (id: string, updates: TaskUpdate): Promise<Task> => {
   const { data } = await httpService.patch<Task>(`/tasks/${id}`, updates);
   return data;
 };
