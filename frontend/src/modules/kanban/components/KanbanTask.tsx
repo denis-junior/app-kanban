@@ -35,7 +35,7 @@ export function KanbanTask({
         >
           <KeyboardArrowLeftIcon />
         </div>
-        <div onClick={() => handleEditTask(task.id, columnId)}>
+        <div style={{cursor: "pointer"}} onClick={() => handleEditTask(task.id, columnId)}>
           <EditIcon />
         </div>
         <div
