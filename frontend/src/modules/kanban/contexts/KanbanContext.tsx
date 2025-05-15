@@ -34,6 +34,11 @@ type KanbanContextType = {
   ) => Promise<void>;
   handleDeleteTask: () => Promise<void>;
   handleCreateTask: () => Promise<void>;
+  handleMoveTask: (
+    taskId: string,
+    sourceColumnId: string,
+    targetColumnId: string
+  ) => Promise<void>;
 };
 
 export const KanbanContext = createContext<KanbanContextType | null>(null);
@@ -172,6 +177,34 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     open();
   };
 
+  const handleMoveTask = async (
+    taskId: string,
+    sourceColumnId: string,
+    targetColumnId: string
+  ) => {
+    setColumns((prevColumns) =>
+      prevColumns.map((column) => {
+        if (column.id === sourceColumnId) {
+          return {
+            ...column,
+            tasks: column.tasks.filter((task) => task.id !== taskId),
+          };
+        }
+        if (column.id === targetColumnId) {
+          const taskToMove = prevColumns
+            .find((col) => col.id === sourceColumnId)
+            ?.tasks.find((task) => task.id === taskId);
+          return {
+            ...column,
+            tasks: taskToMove ? [...column.tasks, { ...taskToMove, status: targetColumnId }] : column.tasks,
+          };
+        }
+        return column;
+      })
+    );
+    await updateTaskStatus(taskId, { status: targetColumnId as TaskStatus});
+  };
+
   return (
     <KanbanContext.Provider
       value={{
@@ -187,6 +220,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
         handleChangeStatus,
         handleDeleteTask,
         handleCreateTask,
+        handleMoveTask,
       }}
     >
       {children}
