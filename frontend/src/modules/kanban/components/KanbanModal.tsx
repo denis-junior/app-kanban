@@ -1,22 +1,29 @@
-// src/components/KanbanModal.tsx
-import { Modal, Button, type ModalProps } from "react-bootstrap";
+import { Modal, Button, Form, type ModalProps } from "react-bootstrap";
 
 interface KanbanModalProps extends ModalProps {
   title: string;
-  body: React.ReactNode;
+  editedTitle: string;
+  editedDescription: string;
+  onChangeEditTask: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onConfirm?: () => void;
   onDelete?: () => Promise<void>;
   confirmText?: string;
   closeText?: string;
+  isNewTask: boolean; // Indica se é uma nova tarefa
 }
 
 export const KanbanModal = ({
   title,
-  body,
+  editedTitle,
+  editedDescription,
+  onChangeEditTask,
   onConfirm,
   onDelete,
   confirmText = "Confirmar",
   closeText = "Fechar",
+  isNewTask,
   ...modalProps
 }: KanbanModalProps) => {
   return (
@@ -24,14 +31,40 @@ export const KanbanModal = ({
       <Modal.Header>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{body}</Modal.Body>
+      <Modal.Body>
+        <Form>
+          <Form.Group className="mb-3" controlId="taskTitle">
+            <Form.Label>Título</Form.Label>
+            <Form.Control
+              type="text"
+              name="task-title"
+              value={editedTitle}
+              onChange={onChangeEditTask}
+              placeholder="Digite o título da tarefa"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="taskDescription">
+            <Form.Label>Descrição</Form.Label>
+            <Form.Control
+              as="textarea"
+              name="task-description"
+              value={editedDescription}
+              onChange={onChangeEditTask}
+              placeholder="Digite a descrição da tarefa"
+              rows={3}
+            />
+          </Form.Group>
+        </Form>
+      </Modal.Body>
       <Modal.Footer className="d-flex justify-content-between">
         <Button variant="secondary" onClick={modalProps.onHide}>
           {closeText}
         </Button>
-        <Button variant="danger" onClick={onDelete}>
-          Delete
-        </Button>
+        {!isNewTask && (
+          <Button variant="danger" onClick={onDelete}>
+            Delete
+          </Button>
+        )}
         {onConfirm && (
           <Button variant="primary" onClick={onConfirm}>
             {confirmText}
