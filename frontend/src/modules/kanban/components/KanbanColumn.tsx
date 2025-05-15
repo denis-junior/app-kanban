@@ -1,14 +1,12 @@
 import type { Column } from "../interfaces/task";
 import { KanbanModal } from "./KanbanModal";
 import { KanbanTask } from "./KanbanTask";
-import { Form } from "react-bootstrap";
 import { useKanban } from "../hooks/useKanban";
 
 export function KanbanColumn({ column }: { column: Column }) {
   const {
     handleEditTask,
     isOpen,
-    selectedTask,
     onChangeEditTask,
     editedTitle,
     editedDescription,
@@ -16,6 +14,7 @@ export function KanbanColumn({ column }: { column: Column }) {
     handleChangeStatus,
     handleDeleteTask,
     close,
+    selectedTask
   } = useKanban();
 
   return (
@@ -43,42 +42,13 @@ export function KanbanColumn({ column }: { column: Column }) {
       <KanbanModal
         show={isOpen}
         onHide={close}
-        backdrop="static"
-        title="Editar Tarefa"
+        title={selectedTask ? "Editar Tarefa" : "Criar Nova Tarefa"}
+        editedTitle={editedTitle}
+        editedDescription={editedDescription}
+        onChangeEditTask={onChangeEditTask}
         onConfirm={handleSaveChanges}
-        confirmText="Salvar"
-        onDelete={handleDeleteTask}
-        body={
-          selectedTask ? (
-            <div>
-              <div className="mb-3">
-                <label htmlFor="task-title" className="form-label">
-                  Título
-                </label>
-                <Form.Control
-                  name="task-title"
-                  type="text"
-                  value={editedTitle}
-                  onChange={onChangeEditTask}
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="task-description" className="form-label">
-                  Descrição
-                </label>
-                <Form.Control
-                  name="task-description"
-                  as="textarea"
-                  rows={3}
-                  value={editedDescription}
-                  onChange={onChangeEditTask}
-                />
-              </div>
-            </div>
-          ) : (
-            "Carregando..."
-          )
-        }
+        onDelete={selectedTask ? handleDeleteTask : undefined}
+        isNewTask={!selectedTask}
       />
     </div>
   );
