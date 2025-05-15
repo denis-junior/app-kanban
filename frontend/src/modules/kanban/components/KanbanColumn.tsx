@@ -14,6 +14,7 @@ export function KanbanColumn({ column }: { column: Column }) {
     editedDescription,
     handleSaveChanges,
     handleChangeStatus,
+    handleDeleteTask,
     close,
   } = useKanban();
 
@@ -44,6 +45,9 @@ export function KanbanColumn({ column }: { column: Column }) {
         onHide={close}
         backdrop="static"
         title="Editar Tarefa"
+        onConfirm={handleSaveChanges}
+        confirmText="Salvar"
+        onDelete={handleDeleteTask}
         body={
           selectedTask ? (
             <div>
@@ -75,8 +79,6 @@ export function KanbanColumn({ column }: { column: Column }) {
             "Carregando..."
           )
         }
-        onConfirm={handleSaveChanges}
-        confirmText="Salvar"
       />
     </div>
   );
