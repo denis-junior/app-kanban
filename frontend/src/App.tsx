@@ -1,9 +1,8 @@
-import './App.css'
-import { KanbanProvider } from './modules/kanban/contexts/KanbanContext'
-import { KanbanBoard } from './modules/kanban/components/KanbanBoard'
+import "./App.css";
+import { KanbanProvider } from "./modules/kanban/contexts/KanbanContext";
+import { KanbanBoard } from "./modules/kanban/components/KanbanBoard";
 
 function App() {
-
   return (
     <KanbanProvider>
       <KanbanBoard />
@@ -11,4 +10,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
