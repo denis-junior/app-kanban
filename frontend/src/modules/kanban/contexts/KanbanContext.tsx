@@ -7,6 +7,8 @@ import type {
   // TaskStatus
 } from "../interfaces/task";
 import {
+  // createTask,
+  deleteTask,
   fetchTasks,
   updateTask,
   updateTaskStatus,
@@ -31,6 +33,8 @@ type KanbanContextType = {
     currentStatus: TaskStatus,
     direction: "left" | "right"
   ) => Promise<void>;
+  handleDeleteTask: () => Promise<void>;
+  handleCreateTask: () => Promise<void>;
 };
 
 export const KanbanContext = createContext<KanbanContextType | null>(null);
@@ -144,13 +148,28 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
         ),
       }))
     );
-
-    console.log(taskId)
-
-    // Atualizar na API (se necessário)
     await updateTaskStatus(taskId, { status: newStatus });
-    await loadTasks(); // Recarregar as tarefas após a atualização
+    await loadTasks();
   };
+
+  const handleDeleteTask = async () => {
+    if (selectedTask) {
+      if (window.confirm("Tem certeza que deseja deletar esta tarefa?")) {
+        await deleteTask(selectedTask.id);
+        await loadTasks();
+        alert("Tarefa deletada com sucesso!");
+       }
+    }
+    close();
+  };
+
+  const handleCreateTask = async () => {
+    // await createTask();
+    open()
+    alert("Tarefa criada com sucesso!");
+    await loadTasks();
+  }
+
 
   return (
     <KanbanContext.Provider
@@ -165,6 +184,8 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
         editedDescription,
         close,
         handleChangeStatus,
+        handleDeleteTask,
+        handleCreateTask
       }}
     >
       {children}
