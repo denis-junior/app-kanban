@@ -1,4 +1,4 @@
-import type { Task } from "../interfaces/task";
+import type { Task, TaskStatus } from "../interfaces/task";
 import EditIcon from "@mui/icons-material/Edit";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -7,10 +7,12 @@ export function KanbanTask({
   task,
   columnId,
   handleEditTask,
+  changeStatus,
 }: {
   task: Task;
   columnId: string;
   handleEditTask: (taskId: string, columnId: string) => void;
+  changeStatus: (taskId: string, status: TaskStatus, direction: "left" | "right") => Promise<void>;
 }) {
   return (
     <div
@@ -27,7 +29,9 @@ export function KanbanTask({
         <div
           style={{
             visibility: task.status === "pending" ? "hidden" : "visible",
+            cursor: "pointer",
           }}
+          onClick={() => changeStatus(task.id, task.status, "left")}
         >
           <KeyboardArrowLeftIcon />
         </div>
@@ -37,7 +41,9 @@ export function KanbanTask({
         <div
           style={{
             visibility: task.status === "done" ? "hidden" : "visible",
+            cursor: "pointer",
           }}
+          onClick={() => changeStatus(task.id, task.status, "right")}
         >
           <KeyboardArrowRightIcon />
         </div>
