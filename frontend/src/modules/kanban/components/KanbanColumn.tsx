@@ -2,6 +2,7 @@ import type { Column } from "../interfaces/task";
 import { KanbanModal } from "./KanbanModal";
 import { KanbanTask } from "./KanbanTask";
 import { useKanban } from "../hooks/useKanban";
+import { Card } from "react-bootstrap";
 
 export function KanbanColumn({ column }: { column: Column }) {
   const {
@@ -14,30 +15,27 @@ export function KanbanColumn({ column }: { column: Column }) {
     handleChangeStatus,
     handleDeleteTask,
     close,
-    selectedTask
+    selectedTask,
   } = useKanban();
 
   return (
-    <div
-      style={{
-        flex: 1,
-        padding: "1rem",
-        backgroundColor: "#f0f0f0",
-        borderRadius: "8px",
-      }}
-    >
-      <h2>{column.title}</h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-        {column.tasks.map((task) => (
-          <KanbanTask
-            key={task.id}
-            task={task}
-            columnId={column.id}
-            handleEditTask={handleEditTask}
-            changeStatus={handleChangeStatus}
-          />
-        ))}
-      </div>
+    <>
+      <Card className="mb-3" style={{ backgroundColor: "rgb(31, 31, 31)" }}>
+        <Card.Body>
+          <h2 className="text-white">{column.title}</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {column.tasks.map((task) => (
+              <KanbanTask
+                key={task.id}
+                task={task}
+                columnId={column.id}
+                handleEditTask={handleEditTask}
+                changeStatus={handleChangeStatus}
+              />
+            ))}
+          </div>
+        </Card.Body>
+      </Card>
 
       <KanbanModal
         show={isOpen}
@@ -50,6 +48,6 @@ export function KanbanColumn({ column }: { column: Column }) {
         onDelete={selectedTask ? handleDeleteTask : undefined}
         isNewTask={!selectedTask}
       />
-    </div>
+    </>
   );
 }

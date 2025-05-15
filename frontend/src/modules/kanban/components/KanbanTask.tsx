@@ -21,6 +21,7 @@ export function KanbanTask({
         backgroundColor: "white",
         borderRadius: "4px",
         boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+        marginBottom: "0.5rem",
       }}
     >
       <h4>{task.title}</h4>
