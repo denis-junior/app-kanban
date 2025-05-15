@@ -13,6 +13,7 @@ export function KanbanColumn({ column }: { column: Column }) {
     editedTitle,
     editedDescription,
     handleSaveChanges,
+    handleChangeStatus,
     close,
   } = useKanban();
 
@@ -33,6 +34,7 @@ export function KanbanColumn({ column }: { column: Column }) {
             task={task}
             columnId={column.id}
             handleEditTask={handleEditTask}
+            changeStatus={handleChangeStatus}
           />
         ))}
       </div>
