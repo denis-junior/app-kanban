@@ -31,7 +31,7 @@ export function KanbanTask({
             visibility: task.status === "pending" ? "hidden" : "visible",
             cursor: "pointer",
           }}
-          onClick={() => changeStatus(task.id, task.status, "left")}
+          onClick={() => changeStatus(task.id, task.status || "pending", "left")}
         >
           <KeyboardArrowLeftIcon />
         </div>
@@ -43,7 +43,7 @@ export function KanbanTask({
             visibility: task.status === "done" ? "hidden" : "visible",
             cursor: "pointer",
           }}
-          onClick={() => changeStatus(task.id, task.status, "right")}
+          onClick={() => changeStatus(task.id, task.status || "pending", "right")}
         >
           <KeyboardArrowRightIcon />
         </div>
