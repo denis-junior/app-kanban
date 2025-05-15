@@ -21,7 +21,7 @@ export const updateTask = async (id: string, updates: TaskUpdate): Promise<Task>
 };
 
 export const updateTaskStatus = async (id: string, updates: TaskUpdate): Promise<Task> => {
-  const { data } = await httpService.patch<Task>(`/tasks/${id}`, updates);
+  const { data } = await httpService.patch<Task>(`/tasks/${id}/status`, updates);
   return data;
 };
 
