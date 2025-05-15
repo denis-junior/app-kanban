@@ -3,9 +3,14 @@ import { createContext, useState, useEffect, type ReactNode } from "react";
 import type {
   Column,
   Task,
+  TaskStatus,
   // TaskStatus
 } from "../interfaces/task";
-import { fetchTasks, updateTask } from "../services/kanbanService";
+import {
+  fetchTasks,
+  updateTask,
+  updateTaskStatus,
+} from "../services/kanbanService";
 import { useModal } from "../../../shared/hooks/useModal";
 // import { fetchTasks, updateTask } from '../services/kanbanService';
 
@@ -21,6 +26,11 @@ type KanbanContextType = {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   close: () => void;
+  handleChangeStatus: (
+    taskId: string,
+    currentStatus: TaskStatus,
+    direction: "left" | "right"
+  ) => Promise<void>;
 };
 
 export const KanbanContext = createContext<KanbanContextType | null>(null);
@@ -100,6 +110,48 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
     close();
   };
 
+  const handleChangeStatus = async (
+    taskId: string,
+    currentStatus: TaskStatus,
+    direction: "left" | "right"
+  ) => {
+    // Ordem dos status
+    const statusOrder: TaskStatus[] = [
+      "pending",
+      "in_progress",
+      "testing",
+      "done",
+    ];
+
+    // Encontrar o índice do status atual
+    const currentIndex = statusOrder.indexOf(currentStatus);
+
+    // Determinar o novo índice com base na direção
+    const newIndex =
+      direction === "right"
+        ? Math.min(currentIndex + 1, statusOrder.length - 1) // Não ultrapassar o último índice
+        : Math.max(currentIndex - 1, 0); // Não ultrapassar o primeiro índice
+
+    // Obter o novo status
+    const newStatus = statusOrder[newIndex];
+
+    // Atualizar a tarefa no estado
+    setColumns((prevColumns) =>
+      prevColumns.map((column) => ({
+        ...column,
+        tasks: column.tasks.map((task) =>
+          task.id === taskId ? { ...task, status: newStatus } : task
+        ),
+      }))
+    );
+
+    console.log(taskId)
+
+    // Atualizar na API (se necessário)
+    await updateTaskStatus(taskId, { status: newStatus });
+    await loadTasks(); // Recarregar as tarefas após a atualização
+  };
+
   return (
     <KanbanContext.Provider
       value={{
@@ -111,7 +163,8 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
         editedTitle,
         onChangeEditTask,
         editedDescription,
-        close
+        close,
+        handleChangeStatus,
       }}
     >
       {children}
