@@ -4,10 +4,9 @@ import type {
   Column,
   Task,
   TaskStatus,
-  // TaskStatus
 } from "../interfaces/task";
 import {
-  // createTask,
+  createTask,
   deleteTask,
   fetchTasks,
   updateTask,
@@ -49,7 +48,6 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
 
   const loadTasks = async () => {
     const tasks = await fetchTasks();
-    console.log("Tarefas carregadas:", tasks);
     setColumns((prevColumns) =>
       prevColumns.map((column) => ({
         ...column,
@@ -100,17 +98,21 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
 
   const handleSaveChanges = async () => {
     if (selectedTask) {
-      console.log("Salvando alterações para a tarefa:", selectedTask);
-      // Atualiza os dados da tarefa (aqui você pode integrar com uma API ou estado global)
       selectedTask.title = editedTitle;
       selectedTask.description = editedDescription;
       await updateTask(selectedTask.id, {
         title: editedTitle,
         description: editedDescription,
       });
-      await loadTasks(); // Recarrega as tarefas após a atualização
       alert("Tarefa atualizada com sucesso!");
+    } else {
+      await createTask({
+        title: editedTitle,
+        description: editedDescription,
+      });
+      alert("Tarefa criada com sucesso!");
     }
+    await loadTasks(); // Recarrega as tarefas após a atualização
     close();
   };
 
@@ -158,18 +160,17 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
         await deleteTask(selectedTask.id);
         await loadTasks();
         alert("Tarefa deletada com sucesso!");
-       }
+      }
     }
     close();
   };
 
   const handleCreateTask = async () => {
-    // await createTask();
-    open()
-    alert("Tarefa criada com sucesso!");
-    await loadTasks();
-  }
-
+    setSelectedTask(null);
+    setEditedTitle("");
+    setEditedDescription("");
+    open();
+  };
 
   return (
     <KanbanContext.Provider
@@ -185,7 +186,7 @@ export function KanbanProvider({ children }: { children: ReactNode }) {
         close,
         handleChangeStatus,
         handleDeleteTask,
-        handleCreateTask
+        handleCreateTask,
       }}
     >
       {children}
