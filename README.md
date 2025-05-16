@@ -43,22 +43,18 @@ Aplicativo de Kanban com NestJS (backend) e React (frontend).
    ```sh
    sudo service postgresql start
    ```
-   3.3 Inicialize o Serviço:
-   ```sh
-   sudo service postgresql start
-   ```
-   3.3 Entre no ambiente do postgreSQL via terminal:
+   3.4 Entre no ambiente do postgreSQL via terminal:
    ```sh
    sudo -u postgres psql
    ```
-   3.3 Crie o banco e o usuário:
+   3.5 Crie o banco e o usuário:
    ```sh
     CREATE DATABASE kanban;
     CREATE USER yourUser WITH ENCRYPTED PASSWORD 'yourPassword';
     GRANT ALL PRIVILEGES ON DATABASE kanban TO yourUser;
     \q
    ```
-   3.4 Por último, atualize o App.module.ts com as credenciais criadas acima por você
+   3.6 Por último, atualize o App.module.ts com as credenciais criadas acima por você
     
 
 4. Inicie o backend em modo desenvolvimento:
