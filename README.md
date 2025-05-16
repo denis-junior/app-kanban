@@ -30,6 +30,7 @@ Aplicativo de Kanban com NestJS (backend) e React (frontend).
    ```
 
 3. Crie o banco de dados PostgreSQL no ambiente linux:
+
    3.1 Atualize os pacotes:
    ```sh
    sudo apt update
