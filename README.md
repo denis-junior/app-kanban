@@ -57,6 +57,7 @@ Aplicativo de Kanban com NestJS (backend) e React (frontend).
    3.6 Por último, atualize o App.module.ts com as credenciais criadas acima por você além de mudar a porta para 5432, que é a porta padrão do postgres.
 
 4. Criando banco de dados com docker:
+   
    4.1 tenha o docker instalado, podendo ser o docker engine ou [docker desktop](https://docs.docker.com/desktop/) no windows.
    
    4.2 crie a imagem do postgres no docker:
@@ -68,7 +69,7 @@ Aplicativo de Kanban com NestJS (backend) e React (frontend).
    docker run -d --name my-postgres-container -p 6000:5432 postgres-kanban-image
    ```
 
-5. Inicie o backend em modo desenvolvimento:
+6. Inicie o backend em modo desenvolvimento:
 
    ```sh
    npm run start:dev
